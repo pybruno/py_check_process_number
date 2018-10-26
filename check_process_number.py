@@ -2,6 +2,7 @@
 import psutil
 import datetime
 import sys
+import json
 
 """
 check number of java process running
@@ -33,17 +34,18 @@ class ProcessCount(object):
             sys.exit(2)
 
     def nagios(self):
+        json_data = json.dumps(self.process_list)
         if self.cpt >= warning:
             print("warning: total of process {} is {} | Total={}, process_list={}".format(
-                self.process_name, self.cpt, self.cpt, self.process_list))
+                self.process_name, self.cpt, self.cpt, json_data))
             sys.exit(1)
         elif self.cpt >= critical:
             print("critical: total of process {} is {} | Total={}, process_list={}".format(
-                self.process_name, self.cpt, self.cpt, self.process_list))
+                self.process_name, self.cpt, self.cpt, json_data))
             sys.exit(2)
         else:
             print("ok: total of process {} is {} | Total={}, process_list={}".format(
-                self.process_name, self.cpt, self.cpt, self.process_list))
+                self.process_name, self.cpt, self.cpt, json_data))
             sys.exit(0)
 
 
@@ -51,3 +53,4 @@ if __name__ == "__main__":
     proc = ProcessCount()
     proc.get_proces()
     proc.nagios()
+
